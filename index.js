@@ -2,15 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     getBooks()
     const form = document.getElementById("add-book-form")
     form.addEventListener("submit", createBook)
-    // const deleteBtn = document.getElementById("delete")
-    // deleteBtn.addEventListener("click", deleteBook)
 })
 
 function getBooks() {
     fetch("http://localhost:3000/books")
     .then(res => res.json())
     .then(res => 
-        {res.forEach(book => populateBook(book))
+        {res.forEach(book => displayBook(book))
     })
 }
 
@@ -22,12 +20,11 @@ function createBook(e) {
        headers: {'Content-Type': 'application/json'},
        body: JSON.stringify({"title": e.target.title.value, "img_url": e.target.img_url.value, "description": e.target.description.value, "likes": 0})
      }).then(resp => resp.json())
-     .then(populateBook)
+     .then(displayBook)
      .then(form.reset())
 }
 
-function deleteBook(e) {
-    
+function deleteBook(e) { 
     fetch(`http://localhost:3000/books/${e.target.dataset.bookId}`, {
         method: "DELETE",
         headers: {"Content-Type":"application/json"}
@@ -36,8 +33,7 @@ function deleteBook(e) {
     .then(document.getElementById(e.target.dataset.bookId).remove())
 }
 
-
-function populateBook(book) {
+function displayBook(book) {
     const ul = document.getElementById("list")
     const li = document.createElement("li")
     li.id = book.id
